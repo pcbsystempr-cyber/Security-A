@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguridad - Registro | PCB</title>
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Professional Security Page Styles - Enhanced Professional Design */
+    :root {
+      --security-primary: #1a365d;
+      --security-primary-light: #2d3748;
+      --security-secondary: #4a5568;
+      --security-accent: #3182ce;
+      --security-success: #38a169;
+      --security-warning: #d69e2e;
+      --security-danger: #e53e3e;
+      --security-bg: #f7fafc;
+      --security-card: #ffffff;
+      --security-text: #2d3748;
+      --security-text-soft: #718096;
+      --security-border: #e2e8f0;
+      --security-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --security-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --security-radius: 12px;
+      --security-radius-lg: 16px;
+    }
+
+    body.dark-mode {
+      --security-primary: #2d3748;
+      --security-primary-light: #4a5568;
+      --security-secondary: #718096;
+      --security-accent: #63b3ed;
+      --security-bg: #1a202c;
+      --security-card: #2d3748;
+      --security-text: #f7fafc;
+      --security-text-soft: #a0aec0;
+      --security-border: #4a5568;
+      --security-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      --security-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* PCB Sistema Button in Header */
+    .pcb-system-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      background: linear-gradient(135deg, var(--security-primary) 0%, var(--security-primary-light) 100%);
+      color: white !important;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 0.7rem;
+      transition: all 0.3s ease;
+      box-shadow: var(--security-shadow);
+      white-space: nowrap;
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+    }
+
+    .pcb-system-btn i {
+      font-size: 0.75rem;
+    }
+
+    .pcb-system-btn:hover {
+      background: linear-gradient(135deg, var(--security-primary-light) 0%, var(--security-secondary) 100%);
+      transform: translateY(-2px);
+      box-shadow: var(--security-shadow-lg);
+      color: white !important;
+    }
+
+    body.dark-mode .pcb-system-btn {
+      background: linear-gradient(135deg, var(--security-primary-light) 0%, var(--security-secondary) 100%);
+    }
+
+    body.dark-mode .pcb-system-btn:hover {
+      background: linear-gradient(135deg, var(--security-secondary) 0%, var(--security-accent) 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--security-text);
+      background: var(--security-bg);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Page Header */
+    .security-page-header {
+      background: linear-gradient(135deg, var(--security-primary) 0%, var(--security-primary-light) 100%);
+      padding: 40px;
+      border-radius: var(--security-radius-lg);
+      margin-bottom: 40px;
+      color: white;
+      box-shadow: var(--security-shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .security-page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    .security-page-header h1 {
+      margin: 0 0 12px 0;
+      font-size: 2.2rem;
+      font-weight: 800;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -0.025em;
+    }
+
+    .security-page-header p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
+      font-weight: 400;
+    }
+
+    /* Dashboard Stats */
+    .security-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .security-stat-card {
+      background: var(--security-card);
+      border-radius: var(--security-radius-lg);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--security-shadow);
+      border: 1px solid var(--security-border);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .security-stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--security-primary), var(--security-accent));
+    }
+
+    .security-stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--security-shadow-lg);
+      border-color: var(--security-primary-light);
+    }
+
+    .security-stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--security-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .security-stat-icon.entries {
+      background: linear-gradient(135deg, rgba(26, 54, 93, 0.1), rgba(45, 116, 148, 0.1));
+      color: var(--security-primary);
+      border: 2px solid rgba(26, 54, 93, 0.1);
+    }
+
+    .security-stat-icon.problems {
+      background: linear-gradient(135deg, rgba(229, 62, 62, 0.1), rgba(197, 48, 48, 0.1));
+      color: var(--security-danger);
+      border: 2px solid rgba(229, 62, 62, 0.1);
+    }
+
+    .security-stat-icon.solved {
+      background: linear-gradient(135deg, rgba(56, 161, 105, 0.1), rgba(34, 197, 94, 0.1));
+      color: var(--security-success);
+      border: 2px solid rgba(56, 161, 105, 0.1);
+    }
+
+    .security-stat-info h4 {
+      margin: 0 0 4px 0;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--security-text);
+      line-height: 1.2;
+    }
+
+    .security-stat-info p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--security-text-soft);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Security Cards */
+    .security-card {
+      background: var(--security-card);
+      border-radius: 20px;
+      border: 1px solid var(--security-border);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .security-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .security-card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--security-border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, rgba(29, 53, 87, 0.03) 0%, rgba(69, 123, 157, 0.03) 100%);
+    }
+
+    .security-card-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--security-text);
+    }
+
+    .security-card-header .header-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .security-card.visitor-card .header-icon {
+      background: rgba(29, 53, 87, 0.15);
+      color: var(--security-primary);
+    }
+
+    .security-card.problem-card .header-icon {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--security-danger);
+    }
+
+    .security-card.admin-card .header-icon {
+      background: rgba(250, 204, 21, 0.15);
+      color: var(--security-warning);
+    }
+
+    .security-card-body {
+      padding: 24px;
+    }
+
+    /* Form Styles */
+    .security-form .form-group {
+      margin-bottom: 18px;
+    }
+
+    .security-form label {
+      display: block;
+      font-weight: 600;
+      color: var(--security-text);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .security-form input,
+    .security-form select,
+    .security-form textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--security-border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: var(--security-bg);
+      color: var(--security-text);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .security-form input:focus,
+    .security-form select:focus,
+    .security-form textarea:focus {
+      outline: none;
+      border-color: var(--security-primary);
+      box-shadow: 0 0 0 4px rgba(29, 53, 87, 0.1);
+    }
+
+    body.dark-mode .security-form input,
+    body.dark-mode .security-form select,
+    body.dark-mode .security-form textarea {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .security-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Buttons */
+    .security-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .security-btn-primary {
+      background: linear-gradient(135deg, var(--security-primary) 0%, var(--security-primary-light) 100%);
+      color: white;
+    }
+
+    .security-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(29, 53, 87, 0.3);
+    }
+
+    .security-btn-success {
+      background: var(--security-success);
+      color: white;
+    }
+
+    .security-btn-success:hover {
+      background: #16a34a;
+      transform: translateY(-2px);
+    }
+
+    .security-btn-danger {
+      background: linear-gradient(135deg, var(--security-danger) 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .security-btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .security-btn-warning {
+      background: linear-gradient(135deg, var(--security-warning) 0%, #eab308 100%);
+      color: #1f2937;
+    }
+
+    .security-btn-warning:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(250, 204, 21, 0.3);
+    }
+
+    .security-btn-block {
+      width: 100%;
+    }
+
+    /* Tables */
+    .security-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      display: block;
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: 500px;
+    }
+
+    .security-table th {
+      background: linear-gradient(135deg, var(--security-primary) 0%, var(--security-primary-light) 100%);
+      color: white;
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .security-table th:first-child {
+      border-radius: 10px 0 0 0;
+    }
+
+    .security-table th:last-child {
+      border-radius: 0 10px 0 0;
+    }
+
+    .security-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--security-border);
+      color: var(--security-text);
+      font-size: 0.9rem;
+      max-width: 200px;
+      overflow: auto;
+      white-space: nowrap;
+    }
+
+    .security-table td:last-child {
+      overflow: visible;
+      white-space: normal;
+      max-width: none;
+    }
+
+    .security-table tr:hover {
+      background: rgba(29, 53, 87, 0.03);
+    }
+
+    body.dark-mode .security-table tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Action Buttons in Table */
+    .action-btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .action-btn.delete {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--security-danger);
+    }
+
+    .action-btn.delete:hover {
+      background: var(--security-danger);
+      color: white;
+    }
+
+    .action-btn.solve {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--security-success);
+    }
+
+    .action-btn.solve:hover {
+      background: var(--security-success);
+      color: white;
+    }
+
+    .action-btn.view {
+      background: rgba(69, 123, 157, 0.15);
+      color: var(--security-primary-light);
+    }
+
+    .action-btn.view:hover {
+      background: var(--security-primary-light);
+      color: white;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .status-badge.pending {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--security-danger);
+    }
+
+    .status-badge.solved {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--security-success);
+    }
+
+    /* Tabs */
+    .security-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      background: var(--security-card);
+      padding: 8px;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .security-tab {
+      flex: 1;
+      padding: 14px 20px;
+      text-align: center;
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      color: var(--security-text-soft);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .security-tab:hover {
+      color: var(--security-text);
+      background: rgba(29, 53, 87, 0.05);
+    }
+
+    .security-tab.active {
+      background: linear-gradient(135deg, var(--security-primary) 0%, var(--security-primary-light) 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(29, 53, 87, 0.3);
+    }
+
+    /* Admin Panel */
+    .admin-panel {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-radius: 16px;
+      border: 2px solid var(--security-warning);
+      padding: 24px;
+      margin-bottom: 30px;
+    }
+
+    body.dark-mode .admin-panel {
+      background: linear-gradient(135deg, #422006 0%, #713f12 100%);
+    }
+
+    .admin-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .admin-panel-header h3 {
+      margin: 0;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    body.dark-mode .admin-panel-header h3 {
+      color: #fbbf24;
+    }
+
+    /* Ensure admin panel elements are always visible and clickable */
+    .admin-panel {
+      position: relative;
+      z-index: 50;
+    }
+
+    .admin-panel .security-btn-danger {
+      position: relative !important;
+      z-index: 100 !important;
+      pointer-events: auto !important;
+    }
+
+    /* Success Message */
+    .success-message {
+      padding: 16px 20px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 10px;
+      color: var(--security-success);
+      font-weight: 600;
+      text-align: center;
+      margin-top: 16px;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--security-text-soft);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Grid Layout */
+    .security-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .security-dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .security-tabs {
+        flex-direction: column;
+      }
+
+      .security-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .security-page-header h1 {
+        font-size: 1.1rem;
+      }
+
+      .security-table {
+        display: block;
+        overflow-x: auto;
+        overflow-y: auto;
+        max-height: 400px;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Photo Preview */
+    #photoPreview {
+      margin-top: 12px;
+    }
+
+    #photoPreview img {
+      max-width: 200px;
+      max-height: 150px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #photoPreview button {
+      margin-left: 10px;
+      padding: 8px 12px;
+    }
+
+    /* Thumbnail in admin problems table */
+    .problem-thumb {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid var(--security-border);
+    }
+
+    .problem-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border-color: var(--security-primary);
+    }
+
+    /* Photo Modal / Lightbox */
+    .photo-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(5px);
+    }
+
+    .photo-modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 50%;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .photo-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10001;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .photo-modal-close:hover {
+      color: var(--security-accent);
+    }
+
+    .photo-modal-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 800px;
+      max-height: 40%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      color: #fff;
+      font-size: 16px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px 25px;
+      border-radius: 12px;
+      line-height: 1.6;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+    .photo-modal-caption::-webkit-scrollbar {
+      width: 10px;
+    }
+    .photo-modal-caption::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+      border-radius: 5px;
+    }
+    .photo-modal-caption::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.5);
+      border-radius: 5px;
+    }
+    .photo-modal-caption::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.7);
+    }
+
+    /* Login Form */
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 30px;
+      background: var(--security-card);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Current Time */
+    .current-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    /* Filter Section */
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+    }
+
+    .modal-content {
+      margin: 10% auto;
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      cursor: default;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: white;
+    }
+
+    /* Mostrar hamburger en todos los tamaños */
+    .hamburger {
+      display: flex !important;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+      padding: 10px;
+      margin-left: auto;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: var(--primary-color);
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    .hamburger:hover span {
+      background: var(--secondary-color);
+    }
+  </style>
+</head>
+<body>
+  <!-- Popup de selección de tema -->
+  <div id="themePopup" class="theme-popup">
+    <div class="theme-popup-content">
+      <h2 data-translate="🎨 Selecciona tu tema preferido">🎨 Selecciona tu tema preferido</h2>
+      <p data-translate="Elige cómo quieres ver el sitio web">Elige cómo quieres ver el sitio web</p>
+      <div class="theme-buttons">
+        <button class="theme-btn theme-btn-light" id="btnLightMode" data-translate="☀️ Modo Claro">
+          ☀️ Modo Claro
+        </button>
+        <button class="theme-btn theme-btn-dark" id="btnDarkMode" data-translate="🌙 Modo Oscuro">
+          🌙 Modo Oscuro
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Script inline para modo claro/oscuro
+    (function () {
+      function hidePopup() {
+        document.getElementById('themePopup').classList.add('hidden');
+      }
+
+      function setLightMode() {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+        hidePopup();
+      }
+
+      function setDarkMode() {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+        hidePopup();
+      }
+
+      function checkTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+          document.body.classList.add('dark-mode');
+          hidePopup();
+        } else if (savedTheme === 'light') {
+          hidePopup();
+        }
+      }
+
+      // Ejecutar inmediatamente
+      checkTheme();
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const btnLight = document.getElementById('btnLightMode');
+        const btnDark = document.getElementById('btnDarkMode');
+
+        if (btnLight) {
+          btnLight.addEventListener('click', setLightMode);
+        }
+        if (btnDark) {
+          btnDark.addEventListener('click', setDarkMode);
+        }
+      });
+    })();
+  </script>
+
+<header>
+    <a href="https://pcbsystempr-cyber.github.io/pcbsystem/" target="_blank" class="pcb-system-btn" title="Ir a PCB Sistema">
+        <i class="fas fa-school"></i>
+        <span>PCB Sistema</span>
+    </a>
+    <div class="container navbar">
+      <div class="logo">
+          <img src="LOGO6.png" alt="Logo Escuela" class="logo-image">
+          <div class="logo-text">
+            <span class="logo-title" data-translate="Escuela Superior Vocacional">Escuela Superior Vocacional</span>
+            <span class="logo-subtitle">Pablo Colón Berdecia</span>
+          </div>
+      </div>
+      <!-- Hamburger Menu Button -->
+      <div class="hamburger" id="hamburgerBtn" style="display: flex !important; flex-direction: column; cursor: pointer; gap: 5px; padding: 10px; position: absolute; right: 20px; top: 25px;">
+        <span style="width: 25px; height: 3px; background: #0ea5e9; transition: 0.3s; border-radius: 2px;"></span>
+        <span style="width: 25px; height: 3px; background: #0ea5e9; transition: 0.3s; border-radius: 2px;"></span>
+        <span style="width: 25px; height: 3px; background: #0ea5e9; transition: 0.3s; border-radius: 2px;"></span>
+      </div>
+      <ul class="nav-menu"></ul>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Seguridad - Registro</h1>
+      <p data-translate="Formulario seguro para controlar accesos e incidencias">Formulario seguro para controlar accesos e incidencias</p>
+    </div>
+  </section>
+
+  <!-- Sidebar Menu -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="sidebar-menu" id="sidebarMenu">
+    <div class="sidebar-header">
+      <h3 data-translate="⚙️ Configuración">⚙️ Configuración</h3>
+    </div>
+    <div class="sidebar-content">
+      <!-- Theme Toggle -->
+      <div class="sidebar-option" id="themeToggle">
+        <span data-translate="🎨 Cambiar Tema">🎨 Cambiar Tema</span>
+      </div>
+      <div class="theme-options" id="themeOptions">
+        <div class="theme-option" id="selectLightTheme">
+          <span data-translate="☀️ Modo Claro">☀️ Modo Claro</span>
+        </div>
+        <div class="theme-option" id="selectDarkTheme">
+          <span data-translate="🌙 Modo Oscuro">🌙 Modo Oscuro</span>
+        </div>
+      </div>
+
+      <!-- Language Toggle -->
+      <div class="sidebar-option" id="languageToggle">
+        <span data-translate="🌐 Cambiar Idioma">🌐 Cambiar Idioma</span>
+      </div>
+      <div class="language-options" id="languageOptions">
+        <div class="language-option" id="selectSpanish">
+          <span>🇵🇷 Español</span>
+        </div>
+        <div class="language-option" id="selectEnglish">
+          <span>🇺🇸 English</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Hamburger menu functionality
+    (function () {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const sidebarMenu = document.getElementById('sidebarMenu');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const themeToggle = document.getElementById('themeToggle');
+      const themeOptions = document.getElementById('themeOptions');
+      const languageToggle = document.getElementById('languageToggle');
+      const languageOptions = document.getElementById('languageOptions');
+      const selectLightTheme = document.getElementById('selectLightTheme');
+      const selectDarkTheme = document.getElementById('selectDarkTheme');
+      const selectSpanish = document.getElementById('selectSpanish');
+      const selectEnglish = document.getElementById('selectEnglish');
+
+      function openSidebarMenu() {
+        sidebarMenu.classList.add('active');
+        sidebarOverlay.classList.add('active');
+      }
+
+      function closeSidebarMenu() {
+        sidebarMenu.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+        themeOptions.classList.remove('active');
+        languageOptions.classList.remove('active');
+      }
+
+      if (hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', openSidebarMenu);
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebarMenu);
+      }
+
+      // Theme toggle
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+          themeOptions.classList.toggle('active');
+          languageOptions.classList.remove('active');
+        });
+      }
+
+      // Language toggle
+      if (languageToggle) {
+        languageToggle.addEventListener('click', function () {
+          languageOptions.classList.toggle('active');
+          themeOptions.classList.remove('active');
+        });
+      }
+
+      // Select Light Theme
+      if (selectLightTheme) {
+        selectLightTheme.addEventListener('click', function () {
+          document.body.classList.remove('dark-mode');
+          localStorage.setItem('theme', 'light');
+          closeSidebarMenu();
+        });
+      }
+
+      // Select Dark Theme
+      if (selectDarkTheme) {
+        selectDarkTheme.addEventListener('click', function () {
+          document.body.classList.add('dark-mode');
+          localStorage.setItem('theme', 'dark');
+          closeSidebarMenu();
+        });
+      }
+
+      // Seleccionar idioma español - revert to original untranslated
+      if (selectSpanish) {
+        selectSpanish.addEventListener('click', function () {
+          localStorage.setItem('language', 'original');
+          revertToOriginal();
+          closeSidebarMenu();
+        });
+      }
+
+      // Seleccionar idioma inglés
+      if (selectEnglish) {
+        selectEnglish.addEventListener('click', function () {
+          localStorage.setItem('language', 'en');
+          translatePage('en');
+          updateDateTime(); // Update date to English
+          closeSidebarMenu();
+        });
+      }
+    })();
+    
+    // Revert to original untranslated version
+    function revertToOriginal() {
+      localStorage.setItem('language', 'original');
+      // Reload the page to restore original content
+      window.location.reload();
+    }
+    
+    // Translation system
+    const translations = {
+      es: {
+        // Header
+        'Seguridad - Registro': 'Seguridad - Registro',
+        'Sistema de Seguridad PCB': 'Sistema de Seguridad PCB',
+        'Registro de visitantes, control de acceso y reporte de incidentes': 'Registro de visitantes, control de acceso y reporte de incidentes',
+        'Formulario seguro para controlar accesos e incidencias': 'Formulario seguro para controlar accesos e incidencias',
+        
+        // Stats
+        'Total Registros': 'Total Registros',
+        'Problemas Reportados': 'Problemas Reportados',
+        'Problemas Resueltos': 'Problemas Resueltos',
+        
+        // Tabs
+        'Registrarse': 'Registrarse',
+        'Reportar Problema': 'Reportar Problema',
+        'Admin': 'Admin',
+        
+        // Fuerza Encubierta
+        'FUERZA ENCUBIERTA': 'FUERZA ENCUBIERTA',
+        'Operación: Cero Bullying': 'Operación: Cero Bullying',
+        'Únete a la iniciativa de seguridad escolar. Buscamos estudiantes y personal comprometido para erradicar el acoso escolar.': 'Únete a la iniciativa de seguridad escolar. Buscamos estudiantes y personal comprometido para erradicar el acoso escolar.',
+        'Si ves algo, di algo.': 'Si ves algo, di algo.',
+        'Tu reporte puede salvar una vida.': 'Tu reporte puede salvar una vida.',
+        'La fuerza encubierta actúa con total discreción y toma medidas disciplinarias inmediatas.': 'La fuerza encubierta actúa con total discreción y toma medidas disciplinarias inmediatas.',
+        
+        // Registration Form
+        'Registro de Entrada/Salida': 'Registro de Entrada/Salida',
+        'Tu Nombre:': 'Tu Nombre:',
+        'Escribe tu nombre': 'Escribe tu nombre',
+        'Tipo de Visitante:': 'Tipo de Visitante:',
+        'Estudiante': 'Estudiante',
+        'Padre/Madre': 'Padre/Madre',
+        'Invitado': 'Invitado',
+        'Proveedor': 'Proveedor',
+        'Trabajador': 'Trabajador',
+        'Acción:': 'Acción:',
+        'Entrada': 'Entrada',
+        'Salida': 'Salida',
+        'Registrar': 'Registrar',
+        
+        // Problem Form
+        'Reportar un Problema': 'Reportar un Problema',
+        '¿Viste algo sospechoso o tienes una emergencia? Repórtalo aquí de manera confidencial.': '¿Viste algo sospechoso o tienes una emergencia? Repórtalo aquí de manera confidencial.',
+        'Tipo de Problema:': 'Tipo de Problema:',
+        'Problema de Seguridad': 'Problema de Seguridad',
+        'Emergencia Médica': 'Emergencia Médica',
+        'Problema de Instalaciones': 'Problema de Instalaciones',
+        'Problema de Conducta': 'Problema de Conducta',
+        'Otro': 'Otro',
+        'Lugar (donde ocurrió):': 'Lugar (donde ocurrió):',
+        'Ej: Entrada principal, Patio, etc.': 'Ej: Entrada principal, Patio, etc.',
+        'Descripción del Problema:': 'Descripción del Problema:',
+        'Describe lo que pasó...': 'Describe lo que pasó...',
+        'Foto (opcional):': 'Foto (opcional):',
+        'Tu Nombre:': 'Tu Nombre:',
+        'Tu nombre': 'Tu nombre',
+        'Enviar Reporte': 'Enviar Reporte',
+        
+        // Admin
+        'Acceso de Administrador': 'Acceso de Administrador',
+        'Contraseña:': 'Contraseña:',
+        'Ingresa la contraseña': 'Ingresa la contraseña',
+        'Iniciar Sesión': 'Iniciar Sesión',
+        'Panel de Administración': 'Panel de Administración',
+        'Cerrar': 'Cerrar',
+        'Registros': 'Registros',
+        'Problemas': 'Problemas',
+        'Exportar CSV': 'Exportar CSV',
+        'Borrar Todo': 'Borrar Todo',
+        'Borrar Todos': 'Borrar Todos',
+        'Eliminar': 'Eliminar',
+        'Resolver': 'Resolver',
+        'Ver': 'Ver',
+        
+        // Table headers
+        'Nombre': 'Nombre',
+        'Tipo': 'Tipo',
+        'Acción': 'Acción',
+        'Hora': 'Hora',
+        'Acciones': 'Acciones',
+        'Lugar': 'Lugar',
+        'Descripción': 'Descripción',
+        'Reportero': 'Reportero',
+        'Fecha': 'Fecha',
+        'Estado': 'Estado',
+        'Foto': 'Foto',
+        'Anónimo': 'Anónimo',
+        'Pendiente': 'Pendiente',
+        'Resuelto': 'Resuelto',
+        
+        // Sidebar
+        '⚙️ Configuración': '⚙️ Configuración',
+        '🎨 Cambiar Tema': '🎨 Cambiar Tema',
+        '☀️ Modo Claro': '☀️ Modo Claro',
+        '🌙 Modo Oscuro': '🌙 Modo Oscuro',
+        '🌐 Cambiar Idioma': '🌐 Cambiar Idioma',
+        '🇵🇷 Español': '🇵🇷 Español',
+        '🇺🇸 English': '🇺🇸 English',
+        
+        // Admin panel header
+        'Admin': 'Admin',
+        
+        // Empty states
+        'No hay registros': 'No hay registros',
+        'No hay problemas reportados': 'No hay problemas reportados',
+        
+        // Messages
+        'Registro completado exitosamente': 'Registro completado exitosamente',
+        'Reporte enviado exitosamente': 'Reporte enviado exitosamente',
+        'Contraseña incorrecta': 'Contraseña incorrecta',
+        'Sesión activa como administrador': 'Sesión activa como administrador',
+        
+        // Confirmations
+        '¿Estás seguro de eliminar este registro?': '¿Estás seguro de eliminar este registro?',
+        '¿Estás seguro de eliminar este reporte?': '¿Estás seguro de eliminar este reporte?',
+        '¿Estás seguro de eliminar TODOS los registros? Esta acción no se puede deshacer.': '¿Estás seguro de eliminar TODOS los registros? Esta acción no se puede deshacer.',
+        '¿Estás seguro de eliminar TODOS los problemas reportados? Esta acción no se puede deshacer.': '¿Estás seguro de eliminar TODOS los problemas reportados? Esta acción no se puede deshacer.',
+        
+        // Export
+        'No hay registros para exportar': 'No hay registros para exportar',
+        'No hay problemas para exportar': 'No hay problemas para exportar',
+        
+        // Placeholders
+        'Por favor ingresa tu nombre': 'Por favor ingresa tu nombre'
+      },
+      en: {
+        // Header
+        'Seguridad - Registro': 'Security - Registration',
+        'Sistema de Seguridad PCB': 'PCB Security System',
+        'Registro de visitantes, control de acceso y reporte de incidentes': 'Visitor registration, access control and incident reporting',
+        'Formulario seguro para controlar accesos e incidencias': 'Safe form to control access and incidents',
+        
+        // Stats
+        'Total Registros': 'Total Registrations',
+        'Problemas Reportados': 'Problems Reported',
+        'Problemas Resueltos': 'Problems Solved',
+        
+        // Tabs
+        'Registrarse': 'Register',
+        'Reportar Problema': 'Report Problem',
+        'Admin': 'Admin',
+        
+        // Fuerza Encubierta
+        'FUERZA ENCUBIERTA': 'UNDERCOVER FORCE',
+        'Operación: Cero Bullying': 'Operation: Zero Bullying',
+        'Únete a la iniciativa de seguridad escolar. Buscamos estudiantes y personal comprometido para erradicar el acoso escolar.': 'Join the school safety initiative. We are looking for committed students and staff to eradicate school bullying.',
+        'Si ves algo, di algo.': 'If you see something, say something.',
+        'Tu reporte puede salvar una vida.': 'Your report can save a life.',
+        'La fuerza encubierta actúa con total discreción y toma medidas disciplinarias inmediatas.': 'The undercover force acts with total discretion and takes immediate disciplinary action.',
+        
+        // Registration Form
+        'Registro de Entrada/Salida': 'Entry/Exit Registration',
+        'Tu Nombre:': 'Your Name:',
+        'Escribe tu nombre': 'Write your name',
+        'Tipo de Visitante:': 'Visitor Type:',
+        'Estudiante': 'Student',
+        'Padre/Madre': 'Parent',
+        'Invitado': 'Guest',
+        'Proveedor': 'Supplier',
+        'Trabajador': 'Worker',
+        'Acción:': 'Action:',
+        'Entrada': 'Entry',
+        'Salida': 'Exit',
+        'Registrar': 'Register',
+        
+        // Problem Form
+        'Reportar un Problema': 'Report a Problem',
+        '¿Viste algo sospechoso o tienes una emergencia? Repórtalo aquí de manera confidencial.': 'Did you see something suspicious or have an emergency? Report it here confidentially.',
+        'Tipo de Problema:': 'Problem Type:',
+        'Problema de Seguridad': 'Security Problem',
+        'Emergencia Médica': 'Medical Emergency',
+        'Problema de Instalaciones': 'Facilities Problem',
+        'Problema de Conducta': 'Conduct Problem',
+        'Otro': 'Other',
+        'Lugar (donde ocurrió):': 'Location (where it happened):',
+        'Ej: Entrada principal, Patio, etc.': 'Ex: Main entrance, Playground, etc.',
+        'Descripción del Problema:': 'Problem Description:',
+        'Describe lo que pasó...': 'Describe what happened...',
+        'Foto (opcional):': 'Photo (optional):',
+        'Tu Nombre:': 'Your Name:',
+        'Tu nombre': 'Your name',
+        'Enviar Reporte': 'Send Report',
+        
+        // Admin
+        'Acceso de Administrador': 'Administrator Access',
+        'Contraseña:': 'Password:',
+        'Ingresa la contraseña': 'Enter the password',
+        'Iniciar Sesión': 'Log In',
+        'Panel de Administración': 'Administration Panel',
+        'Cerrar': 'Close',
+        'Registros': 'Records',
+        'Problemas': 'Problems',
+        'Exportar CSV': 'Export CSV',
+        'Borrar Todo': 'Delete All',
+        'Borrar Todos': 'Delete All',
+        'Eliminar': 'Delete',
+        'Resolver': 'Solve',
+        'Ver': 'View',
+        
+        // Table headers
+        'Nombre': 'Name',
+        'Tipo': 'Type',
+        'Acción': 'Action',
+        'Hora': 'Time',
+        'Acciones': 'Actions',
+        'Lugar': 'Location',
+        'Descripción': 'Description',
+        'Reportero': 'Reporter',
+        'Fecha': 'Date',
+        'Estado': 'Status',
+        'Foto': 'Photo',
+        'Anónimo': 'Anonymous',
+        'Pendiente': 'Pending',
+        'Resuelto': 'Solved',
+        
+        // Sidebar
+        '⚙️ Configuración': '⚙️ Settings',
+        '🎨 Cambiar Tema': '🎨 Change Theme',
+        '☀️ Modo Claro': '☀️ Light Mode',
+        '🌙 Modo Oscuro': '🌙 Dark Mode',
+        '🌐 Cambiar Idioma': '🌐 Change Language',
+        '🇵🇷 Español': '🇵🇷 Spanish',
+        '🇺🇸 English': '🇺🇸 English',
+        
+        // Admin panel header
+        'Admin': 'Admin',
+        
+        // Empty states
+        'No hay registros': 'No records',
+        'No hay problemas reportados': 'No problems reported',
+        
+        // Messages
+        'Registro completado exitosamente': 'Registration completed successfully',
+        'Reporte enviado exitosamente': 'Report sent successfully',
+        'Contraseña incorrecta': 'Incorrect password',
+        'Sesión activa como administrador': 'Active session as administrator',
+        
+        // Confirmations
+        '¿Estás seguro de eliminar este registro?': 'Are you sure you want to delete this record?',
+        '¿Estás seguro de eliminar este reporte?': 'Are you sure you want to delete this report?',
+        '¿Estás seguro de eliminar TODOS los registros? Esta acción no se puede deshacer.': 'Are you sure you want to delete ALL records? This action cannot be undone.',
+        '¿Estás seguro de eliminar TODOS los problemas reportados? Esta acción no se puede deshacer.': 'Are you sure you want to delete ALL reported problems? This action cannot be undone.',
+        
+        // Export
+        'No hay registros para exportar': 'No records to export',
+        'No hay problemas para exportar': 'No problems to export',
+        
+        // Placeholders
+        'Por favor ingresa tu nombre': 'Please enter your name'
+      }
+    };
+    
+    // Translation function - simplified and unified
+    function translatePage(lang) {
+      // Save language to localStorage
+      localStorage.setItem('language', lang);
+      
+      // Get the translations for the current language
+      const t = translations[lang];
+      if (!t) return;
+      
+      // Update document lang attribute
+      document.documentElement.lang = lang;
+      
+      // Translate elements with data-translate attribute
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (t[key]) {
+          el.textContent = t[key];
+        }
+      });
+      
+      // Translate input placeholders
+      document.querySelectorAll('input[placeholder]').forEach(el => {
+        const key = el.getAttribute('placeholder');
+        if (t[key]) {
+          el.setAttribute('placeholder', t[key]);
+        }
+      });
+      
+      // Translate select options
+      document.querySelectorAll('select').forEach(select => {
+        select.querySelectorAll('option').forEach(option => {
+          const key = option.textContent.trim();
+          if (t[key]) {
+            option.textContent = t[key];
+          }
+        });
+      });
+      
+      // Translate button text - preserve icons and other child elements
+      document.querySelectorAll('button').forEach(btn => {
+        // Skip buttons with data-translate attribute (handled above)
+        if (btn.hasAttribute('data-translate')) return;
+        
+        // Get the text node content only (not icons)
+        const textContent = btn.textContent.trim();
+        if (t[textContent]) {
+          // Preserve all child elements (icons) and replace only the text
+          const iconElements = btn.querySelectorAll('i');
+          btn.textContent = t[textContent];
+          // Re-append icon elements at the beginning
+          iconElements.forEach(icon => {
+            btn.insertBefore(icon, btn.firstChild);
+          });
+        }
+      });
+      
+      // Translate labels
+      document.querySelectorAll('label').forEach(label => {
+        const key = label.textContent.trim();
+        if (t[key]) {
+          label.textContent = t[key];
+        }
+      });
+      
+      // Translate table headers
+      document.querySelectorAll('th').forEach(th => {
+        const key = th.textContent.trim();
+        if (t[key]) {
+          th.textContent = t[key];
+        }
+      });
+      
+      // Translate h1, h2, h3 elements
+      document.querySelectorAll('h1, h2, h3').forEach(heading => {
+        const key = heading.textContent.trim();
+        if (t[key]) {
+          heading.textContent = t[key];
+        }
+      });
+      
+      // Translate paragraph and span elements
+      document.querySelectorAll('p, span').forEach(el => {
+        const key = el.textContent.trim();
+        if (t[key] && !el.hasAttribute('data-translate')) {
+          el.textContent = t[key];
+        }
+      });
+    }
+    
+    // Check saved language on load
+    (function() {
+      const savedLang = localStorage.getItem('language');
+      if (savedLang) {
+        translatePage(savedLang);
+      }
+    })();
+  </script>
+
+  <div class="container" style="padding: 40px 0;">
+    <!-- Professional Header -->
+    <div class="security-page-header">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h1><i class="fas fa-shield-alt"></i> Sistema de Seguridad PCB</h1>
+          <p>Registro de visitantes, control de acceso y reporte de incidentes</p>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div class="current-time">
+            <i class="fas fa-clock"></i>
+            <span id="currentDateTime"></span>
+          </div>
+          <button id="adminToggleBtn" class="security-btn security-btn-warning" onclick="toggleAdminMode()">
+            <i class="fas fa-cog"></i> Admin
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Dashboard -->
+    <div class="security-stats">
+      <div class="security-stat-card">
+        <div class="security-stat-icon entries">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="security-stat-info">
+          <h4 id="statTotalEntries">0</h4>
+          <p>Total Registros</p>
+        </div>
+      </div>
+      <div class="security-stat-card">
+        <div class="security-stat-icon problems">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="security-stat-info">
+          <h4 id="statTotalProblems">0</h4>
+          <p>Problemas Reportados</p>
+        </div>
+      </div>
+      <div class="security-stat-card">
+        <div class="security-stat-icon solved">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="security-stat-info">
+          <h4 id="statSolvedProblems">0</h4>
+          <p>Problemas Resueltos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel hidden">
+      <div class="admin-panel-header">
+        <h3><i class="fas fa-user-shield"></i> Panel de Administración</h3>
+        <button class="security-btn security-btn-danger" onclick="closeAdminPanel()" style="padding: 10px 16px;">
+          <i class="fas fa-times"></i> Cerrar
+        </button>
+      </div>
+      
+      <div class="filter-buttons">
+        <button onclick="showAdminSection('entries')" class="security-btn security-btn-primary" style="padding: 10px 16px;">
+          <i class="fas fa-list"></i> Registros
+        </button>
+        <button onclick="showAdminSection('problems')" class="security-btn security-btn-primary" style="padding: 10px 16px;">
+          <i class="fas fa-exclamation-triangle"></i> Problemas
+        </button>
+      </div>
+      
+      <!-- Entries Section -->
+      <div id="entriesSection">
+        <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+          <button onclick="exportEntries()" class="security-btn security-btn-primary" style="padding: 10px 16px;">
+            <i class="fas fa-download"></i> Exportar CSV
+          </button>
+          <button onclick="clearEntries()" class="security-btn security-btn-danger" style="padding: 10px 16px;">
+            <i class="fas fa-trash"></i> Borrar Todo
+          </button>
+        </div>
+        <table class="security-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Acción</th>
+              <th>Hora</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="entriesBody"></tbody>
+        </table>
+      </div>
+      
+      <!-- Problems Section -->
+      <div id="problemsSection" class="hidden">
+        <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+          <button onclick="exportProblems()" class="security-btn security-btn-primary" style="padding: 10px 16px;">
+            <i class="fas fa-download"></i> Exportar CSV
+          </button>
+          <button onclick="clearAllProblems()" class="security-btn security-btn-danger" style="padding: 10px 16px;">
+            <i class="fas fa-trash"></i> Borrar Todos
+          </button>
+        </div>
+        <table class="security-table">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Lugar</th>
+              <th>Descripción</th>
+              <th>Reportero</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Foto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="problemsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="security-tabs">
+      <button class="security-tab active" data-tab="register" onclick="showTab('register')">
+        <i class="fas fa-user-plus"></i> Registrarse
+      </button>
+      <button class="security-tab" data-tab="problem" onclick="showTab('problem')">
+        <i class="fas fa-exclamation-triangle"></i> Reportar Problema
+      </button>
+      <button class="security-tab" data-tab="admin" onclick="showTab('admin')">
+        <i class="fas fa-lock"></i> Admin
+      </button>
+    </div>
+
+    <!-- Fuerza Encubierta Section -->
+    <div class="fuerza-section" style="background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%); border-radius: 16px; padding: 24px; margin-bottom: 30px; color: white; border: 2px solid #3182ce; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+        <div style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <i class="fas fa-user-secret" style="font-size: 1.8rem;"></i>
+        </div>
+        <div>
+          <h3 style="margin: 0; font-size: 1.4rem; font-weight: 700; color: #fff;" data-translate="FUERZA ENCUBIERTA">FUERZA ENCUBIERTA</h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.95rem; color: #e2e8f0; font-weight: 500;" data-translate="Operación: Cero Bullying">Operación: Cero Bullying</p>
+        </div>
+      </div>
+      <div style="background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 16px;">
+        <p style="margin: 0 0 12px 0; font-size: 0.95rem; line-height: 1.6; color: #e2e8f0;" data-translate="Únete a la iniciativa de seguridad escolar. Buscamos estudiantes y personal comprometido para erradicar el acoso escolar.">Únete a la iniciativa de seguridad escolar. Buscamos estudiantes y personal comprometido para eradicar el acoso escolar.</p>
+        <p style="margin: 0 0 12px 0; font-size: 0.95rem; line-height: 1.6; color: #e2e8f0;" data-translate="Si ves algo, di algo. Tu reporte puede salvar una vida."><strong style="color: #63b3ed;" data-translate="Si ves algo, di algo.">Si ves algo, di algo.</strong> <span data-translate="Tu reporte puede salvar una vida.">Tu reporte puede salvar una vida.</span></p>
+        <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #a0aec0;"><i class="fas fa-shield-alt" style="color: #38a169; margin-right: 6px;"></i><span data-translate="La fuerza encubierta actúa con total discreción y toma medidas disciplinarias inmediatas.">La fuerza encubierta actúa con total discreción y toma medidas disciplinarias inmediatas.</span></p>
+      </div>
+    </div>
+
+    <!-- Guest Registration -->
+    <div id="register-tab" class="security-dashboard">
+      <div class="security-card visitor-card">
+        <div class="security-card-header">
+          <div class="header-icon">
+            <i class="fas fa-door-open"></i>
+          </div>
+          <h3>Registro de Entrada/Salida</h3>
+        </div>
+        <div class="security-card-body">
+          <form id="guestForm" class="security-form" onsubmit="guestRegister(event)">
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Tu Nombre:</label>
+              <input type="text" id="guestName" placeholder="Escribe tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-users"></i> Tipo de Visitante:</label>
+              <select id="guestType">
+                <option value="Estudiante">🎓 Estudiante</option>
+                <option value="Padre/Madre">👨‍👩‍👧 Padre/Madre</option>
+                <option value="Invitado">👤 Invitado</option>
+                <option value="Proveedor">📦 Proveedor</option>
+                <option value="Trabajador">👔 Trabajador</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-sign-in-alt"></i> Acción:</label>
+              <select id="guestAction">
+                <option value="Entrada">🚪 Entrada</option>
+                <option value="Salida">🚶 Salida</option>
+              </select>
+            </div>
+            <button type="submit" class="security-btn security-btn-primary security-btn-block">
+              <i class="fas fa-check"></i> Registrar
+            </button>
+          </form>
+          <div id="registerMessage"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problem Reporting -->
+    <div id="problem-tab" class="hidden">
+      <div class="security-card problem-card">
+        <div class="security-card-header">
+          <div class="header-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h3>Reportar un Problema</h3>
+        </div>
+        <div class="security-card-body">
+          <p style="color: var(--security-text-soft); margin-bottom: 20px;">
+            ¿Viste algo sospechoso o tienes una emergencia? Repórtalo aquí de manera confidencial.
+          </p>
+          <form id="problemForm" class="security-form" onsubmit="reportProblem(event)">
+            <div class="form-group">
+              <label><i class="fas fa-tags"></i> Tipo de Problema:</label>
+              <select id="problemType">
+                <option value="Seguridad">🔒 Problema de Seguridad</option>
+                <option value="Emergencia">🚨 Emergencia Médica</option>
+                <option value="Instalaciones">🏠 Problema de Instalaciones</option>
+                <option value="Conducta">👥 Problema de Conducta</option>
+                <option value="Otro">❓ Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-map-marker-alt"></i> Lugar (donde ocurrió):</label>
+              <input type="text" id="problemLocation" maxlength="40" placeholder="Ej: Entrada principal, Patio, etc." required>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-align-left"></i> Descripción del Problema:</label>
+              <textarea id="problemDesc" rows="4" maxlength="500" placeholder="Describe lo que pasó..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-camera"></i> Foto (opcional):</label>
+              <input type="file" id="problemPhoto" accept="image/*" onchange="previewPhoto()">
+              <div id="photoPreview"></div>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Tu Nombre:</label>
+              <input type="text" id="problemReporter" maxlength="50" placeholder="Tu nombre" required>
+            </div>
+            <button type="submit" class="security-btn security-btn-danger security-btn-block">
+              <i class="fas fa-paper-plane"></i> Enviar Reporte
+            </button>
+          </form>
+          <div id="problemMessage"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Login -->
+    <div id="admin-tab" class="hidden">
+      <div class="login-container">
+        <div class="security-card admin-card">
+          <div class="security-card-header">
+            <div class="header-icon">
+              <i class="fas fa-lock"></i>
+            </div>
+            <h3>Acceso de Administrador</h3>
+          </div>
+          <div class="security-card-body">
+<div id="loginForm">
+              <form class="security-form" onsubmit="adminLogin(); return false;">
+                <div class="form-group">
+                  <label><i class="fas fa-key"></i> Contraseña:</label>
+                  <input type="password" id="adminPassword" placeholder="Ingresa la contraseña" required>
+                </div>
+                <button type="submit" class="security-btn security-btn-warning security-btn-block">
+                  <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
+              </form>
+            </div>
+            <div id="adminWelcome" class="hidden">
+              <div class="success-message" style="margin-bottom: 20px;">
+                <i class="fas fa-check-circle"></i> <span data-translate="Sesión activa como administrador">Sesión activa como administrador</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+// Security System - PCB School (inlined from jss/security.js)
+
+let isAdmin = false;
+const ADMIN_PASSWORD = 'admin123';
+
+// Restore admin state if page was reloaded while admin was active
+(function() {
+  if (sessionStorage.getItem('adminActive') === '1') {
+    isAdmin = true;
+  }
+})();
+
+const TRANSLATIONS = {
+  es: {
+    'Contraseña incorrecta': 'Contraseña incorrecta',
+    'No hay registros': 'No hay registros',
+    'No hay problemas reportados': 'No hay problemas reportados',
+    'Eliminar': 'Eliminar',
+    'Resolver': 'Resolver',
+    '¿Estás seguro de eliminar este registro?': '¿Estás seguro de eliminar este registro?',
+    '¿Estás seguro de eliminar este reporte?': '¿Estás seguro de eliminar este reporte?',
+    '¿Estás seguro de eliminar TODOS los registros? Esta acción no se puede deshacer.': '¿Estás seguro de eliminar TODOS los registros? Esta acción no se puede deshacer.',
+    '¿Estás seguro de eliminar TODOS los problemas reportados? Esta acción no se puede deshacer.': '¿Estás seguro de eliminar TODOS los problemas reportados? Esta acción no se puede deshacer.',
+    'No hay registros para exportar': 'No hay registros para exportar',
+    'No hay problemas para exportar': 'No hay problemas para exportar',
+    'Registro completado exitosamente': 'Registro completado exitosamente',
+    'Reporte enviado exitosamente': 'Reporte enviado exitosamente',
+    'Por favor ingresa tu nombre': 'Por favor ingresa tu nombre',
+    'Pendiente': 'Pendiente',
+    'Resuelto': 'Resuelto',
+    'Anónimo': 'Anónimo',
+    'Foto': 'Foto',
+    'Formulario seguro para controlar accesos e incidencias': 'Formulario seguro para controlar accesos e incidencias',
+    'Sesión activa como administrador': 'Sesión activa como administrador'
+  },
+  en: {
+    'Contraseña incorrecta': 'Incorrect password',
+    'No hay registros': 'No records',
+    'No hay problemas reportados': 'No problems reported',
+    'Eliminar': 'Delete',
+    'Resolver': 'Solve',
+    '¿Estás seguro de eliminar este registro?': 'Are you sure you want to delete this record?',
+    '¿Estás seguro de eliminar este reporte?': 'Are you sure you want to delete this report?',
+    '¿Estás seguro de eliminar TODOS los registros? Esta acción no se puede deshacer.': 'Are you sure you want to delete ALL records? This action cannot be undone.',
+    '¿Estás seguro de eliminar TODOS los problemas reportados? Esta acción no se puede deshacer.': 'Are you sure you want to delete ALL reported problems? This action cannot be undone.',
+    'No hay registros para exportar': 'No records to export',
+    'No hay problemas para exportar': 'No problems to export',
+    'Registro completado exitosamente': 'Registration completed successfully',
+    'Reporte enviado exitosamente': 'Report sent successfully',
+    'Por favor ingresa tu nombre': 'Please enter your name',
+    'Pendiente': 'Pending',
+    'Resuelto': 'Solved',
+    'Anónimo': 'Anonymous',
+    'Foto': 'Photo',
+    'Formulario seguro para controlar accesos e incidencias': 'Safe form to control access and incidents',
+    'Sesión activa como administrador': 'Active session as administrator'
+  }
+};
+
+function getCurrentLang() {
+  return localStorage.getItem('language') || 'es';
+}
+
+function t(key) {
+  const lang = getCurrentLang();
+  return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) ? TRANSLATIONS[lang][key] : key;
+}
+
+let currentPhoto = null;
+const ENTRIES_KEY = 'security_entries';
+const PROBLEMS_KEY = 'security_problems';
+
+function loadEntries() {
+  try { return JSON.parse(localStorage.getItem(ENTRIES_KEY)) || []; } catch(e) { return []; }
+}
+function saveEntries(entries) {
+  try { localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries)); } catch(e) { alert('Error al guardar: almacenamiento lleno.'); }
+}
+function loadProblems() {
+  try { return JSON.parse(localStorage.getItem(PROBLEMS_KEY)) || []; } catch(e) { return []; }
+}
+function saveProblems(problems) {
+  try { localStorage.setItem(PROBLEMS_KEY, JSON.stringify(problems)); } catch(e) { alert('Error al guardar: almacenamiento lleno.'); }
+}
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function closeAdminPanel() {
+  var adminPanel = document.getElementById('adminPanel');
+  if (adminPanel) adminPanel.classList.add('hidden');
+  isAdmin = false;
+  sessionStorage.removeItem('adminActive');
+  // Reset login form so it shows next time
+  var loginForm = document.getElementById('loginForm');
+  var adminWelcome = document.getElementById('adminWelcome');
+  if (loginForm) loginForm.classList.remove('hidden');
+  if (adminWelcome) adminWelcome.classList.add('hidden');
+  showTab('register');
+}
+
+function toggleAdminMode() {
+  var adminPanel = document.getElementById('adminPanel');
+  if (isAdmin) {
+    closeAdminPanel();
+  } else {
+    showTab('admin');
+  }
+}
+
+function adminLogin() {
+  const passwordInput = document.getElementById('adminPassword');
+  const password = passwordInput ? passwordInput.value : '';
+  if (password === ADMIN_PASSWORD) {
+    isAdmin = true;
+    sessionStorage.setItem('adminActive', '1');
+    const loginForm = document.getElementById('loginForm');
+    const adminWelcome = document.getElementById('adminWelcome');
+    if (loginForm) loginForm.classList.add('hidden');
+    if (adminWelcome) adminWelcome.classList.remove('hidden');
+    setTimeout(function() {
+      const adminPanel = document.getElementById('adminPanel');
+      if (adminPanel) adminPanel.classList.remove('hidden');
+      showAdminSection('entries');
+      updateStats();
+    }, 500);
+  } else {
+    alert(t('Contraseña incorrecta'));
+    if (passwordInput) passwordInput.value = '';
+  }
+}
+
+function showAdminSection(section) {
+  const entriesSection = document.getElementById('entriesSection');
+  const problemsSection = document.getElementById('problemsSection');
+  if (section === 'entries') {
+    if (entriesSection) entriesSection.classList.remove('hidden');
+    if (problemsSection) problemsSection.classList.add('hidden');
+    renderEntries();
+  } else if (section === 'problems') {
+    if (entriesSection) entriesSection.classList.add('hidden');
+    if (problemsSection) problemsSection.classList.remove('hidden');
+    renderProblems();
+  }
+}
+
+// Helper function to parse Spanish date format
+function parseSpanishDate(dateStr) {
+  if (!dateStr) return new Date(0);
+  var parts = dateStr.split(/[/, :]/);
+  if (parts.length >= 3) {
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1;
+    var year = parseInt(parts[2], 10);
+    var hour = parts[3] ? parseInt(parts[3], 10) : 0;
+    var minute = parts[4] ? parseInt(parts[4], 10) : 0;
+    var second = parts[5] ? parseInt(parts[5], 10) : 0;
+    return new Date(year, month, day, hour, minute, second);
+  }
+  return new Date(dateStr);
+}
+
+function renderEntries() {
+  const tbody = document.getElementById('entriesBody');
+  if (!tbody) return;
+  let entries = loadEntries();
+  if (entries.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--security-text-soft);">' + t('No hay registros') + '</td></tr>';
+    return;
+  }
+  // Create array with original indices for sorting
+  let entriesWithIndex = entries.map(function(entry, index) {
+    return { entry: entry, originalIndex: index };
+  });
+  // Sort by date (newest first)
+  entriesWithIndex.sort(function(a, b) { return parseSpanishDate(b.entry.time) - parseSpanishDate(a.entry.time); });
+  tbody.innerHTML = entriesWithIndex.map(function(item) {
+    return '<tr><td>' + escapeHtml(item.entry.name) + '</td><td>' + escapeHtml(item.entry.type) + '</td><td>' + escapeHtml(item.entry.action) + '</td><td>' + escapeHtml(item.entry.time) + '</td><td><button class="action-btn view" onclick="viewEntry(' + item.originalIndex + ')"><i class="fas fa-eye"></i></button> <button class="action-btn delete" onclick="deleteEntry(' + item.originalIndex + ')"><i class="fas fa-trash"></i> ' + t('Eliminar') + '</button></td></tr>';
+  }).join('');
+}
+
+function renderProblems() {
+  const tbody = document.getElementById('problemsBody');
+  if (!tbody) return;
+  let problems = loadProblems();
+  if (problems.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--security-text-soft);">' + t('No hay problemas reportados') + '</td></tr>';
+    return;
+  }
+  // Create array with original indices for sorting
+  let problemsWithIndex = problems.map(function(problem, index) {
+    return { problem: problem, originalIndex: index };
+  });
+  // Sort by date (newest first)
+  problemsWithIndex.sort(function(a, b) { return parseSpanishDate(b.problem.date) - parseSpanishDate(a.problem.date); });
+  tbody.innerHTML = problemsWithIndex.map(function(item) {
+    var photoCell = item.problem.photo ? '<img src="' + escapeHtml(item.problem.photo) + '" class="problem-thumb" onclick="openPhoto(' + item.originalIndex + ')" alt="' + t('Foto') + '">' : '<button class="action-btn view" onclick="viewProblem(' + item.originalIndex + ')"><i class="fas fa-eye"></i></button>';
+    var resolveBtn = !item.problem.resolved ? '<button class="action-btn solve" onclick="resolveProblem(' + item.originalIndex + ')"><i class="fas fa-check"></i> ' + t('Resolver') + '</button> ' : '';
+    var statusBadge = item.problem.resolved
+      ? '<span class="status-badge solved"><i class="fas fa-check"></i> ' + t('Resuelto') + '</span>'
+      : '<span class="status-badge pending"><i class="fas fa-clock"></i> ' + t('Pendiente') + '</span>';
+    return '<tr><td>' + escapeHtml(item.problem.type) + '</td><td>' + escapeHtml(item.problem.location) + '</td><td>' + escapeHtml(item.problem.description) + '</td><td>' + escapeHtml(item.problem.reporter || t('Anónimo')) + '</td><td>' + escapeHtml(item.problem.date) + '</td><td>' + statusBadge + '</td><td>' + photoCell + '</td><td>' + resolveBtn + '<button class="action-btn delete" onclick="deleteProblem(' + item.originalIndex + ')"><i class="fas fa-trash"></i> ' + t('Eliminar') + '</button></td></tr>';
+  }).join('');
+}
+
+function deleteEntry(index) {
+  if (!confirm(t('¿Estás seguro de eliminar este registro?'))) return;
+  var entries = loadEntries(); entries.splice(index, 1); saveEntries(entries); renderEntries(); updateStats();
+}
+function deleteProblem(index) {
+  if (!confirm(t('¿Estás seguro de eliminar este reporte?'))) return;
+  var problems = loadProblems(); problems.splice(index, 1); saveProblems(problems); renderProblems(); updateStats();
+}
+function resolveProblem(index) {
+  var problems = loadProblems(); problems[index].resolved = true; saveProblems(problems); renderProblems(); updateStats();
+}
+function clearEntries() {
+  if (!confirm(t('¿Estás seguro de eliminar TODOS los registros? Esta acción no se puede deshacer.'))) return;
+  localStorage.removeItem(ENTRIES_KEY); renderEntries(); updateStats();
+}
+function clearAllProblems() {
+  if (!confirm(t('¿Estás seguro de eliminar TODOS los problemas reportados? Esta acción no se puede deshacer.'))) return;
+  localStorage.removeItem(PROBLEMS_KEY); renderProblems(); updateStats();
+}
+
+function csvEscape(val) {
+  var s = String(val == null ? '' : val).replace(/"/g, '""');
+  return /^[=+\-@]/.test(s) ? '"\''+s+'"' : '"'+s+'"';
+}
+function exportEntries() {
+  var entries = loadEntries();
+  if (!entries.length) { alert(t('No hay registros para exportar')); return; }
+  var csv = 'Nombre,Tipo,Acción,Hora\n';
+  entries.forEach(function(e) { csv += csvEscape(e.name)+','+csvEscape(e.type)+','+csvEscape(e.action)+','+csvEscape(e.time)+'\n'; });
+  downloadCSV(csv, 'registros_seguridad.csv');
+}
+function exportProblems() {
+  var problems = loadProblems();
+  if (!problems.length) { alert(t('No hay problemas para exportar')); return; }
+  var csv = 'Tipo,Lugar,Descripción,Reportero,Fecha,Estado\n';
+  problems.forEach(function(p) { csv += csvEscape(p.type)+','+csvEscape(p.location)+','+csvEscape(p.description)+','+csvEscape(p.reporter||t('Anónimo'))+','+csvEscape(p.date)+','+csvEscape(p.resolved?t('Resuelto'):t('Pendiente'))+'\n'; });
+  downloadCSV(csv, 'problemas_seguridad.csv');
+}
+function downloadCSV(csv, filename) {
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+}
+
+function guestRegister(event) {
+  event.preventDefault();
+  var name = document.getElementById('guestName').value.trim();
+  var type = document.getElementById('guestType').value;
+  var action = document.getElementById('guestAction').value;
+  var entry = { name: name, type: type, action: action, time: new Date().toLocaleString('es-ES') };
+  var entries = loadEntries(); entries.push(entry); saveEntries(entries);
+  var messageDiv = document.getElementById('registerMessage');
+  if (messageDiv) {
+    messageDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> ' + t('Registro completado exitosamente') + '</div>';
+    setTimeout(function(){ messageDiv.innerHTML = ''; }, 3000);
+  }
+  document.getElementById('guestForm').reset();
+  updateStats();
+}
+
+function reportProblem(event) {
+  event.preventDefault();
+  var type = document.getElementById('problemType').value;
+  var location = document.getElementById('problemLocation').value;
+  var description = document.getElementById('problemDesc').value;
+  var reporter = document.getElementById('problemReporter').value.trim();
+  if (!reporter) { alert(t('Por favor ingresa tu nombre')); return; }
+  var problem = { type: type, location: location, description: description, reporter: reporter, date: new Date().toLocaleString('es-ES'), resolved: false, photo: currentPhoto };
+  var problems = loadProblems(); problems.push(problem); saveProblems(problems);
+  var messageDiv = document.getElementById('problemMessage');
+  if (messageDiv) {
+    messageDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> ' + t('Reporte enviado exitosamente') + '</div>';
+    setTimeout(function(){ messageDiv.innerHTML = ''; }, 3000);
+  }
+  document.getElementById('problemForm').reset();
+  var pp = document.getElementById('photoPreview');
+  if (pp) pp.innerHTML = '';
+  currentPhoto = null;
+  updateStats();
+}
+
+function previewPhoto() {
+  var input = document.getElementById('problemPhoto');
+  var preview = document.getElementById('photoPreview');
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) { currentPhoto = e.target.result; if (preview) preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview">'; };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function openPhoto(index) {
+  var problems = loadProblems();
+  var p = problems[index];
+  if (p && p.photo) {
+    var modal = document.getElementById('photoModal');
+    var modalImg = document.getElementById('photoModalImg');
+    var caption = document.getElementById('photoModalCaption');
+    if (modal && modalImg && caption) {
+      modalImg.src = p.photo;
+      modalImg.style.display = 'block';
+      caption.innerHTML = '<strong>' + p.type + '</strong> - ' + p.location + '<br><small>' + p.date + '</small><br><br>' + 
+        '<strong>Descripción:</strong> ' + p.description + '<br><br>' + 
+        '<strong>Reportado por:</strong> ' + (p.reporter || t('Anónimo'));
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+}
+
+function viewProblem(index) {
+  var problems = loadProblems();
+  var p = problems[index];
+  if (p) {
+    var modal = document.getElementById('photoModal');
+    var modalImg = document.getElementById('photoModalImg');
+    var caption = document.getElementById('photoModalCaption');
+    if (modal && modalImg && caption) {
+      var details = '<strong>' + p.type + '</strong><br>' + 
+        '<strong>📍 Lugar:</strong> ' + p.location + '<br>' + 
+        '<strong>📅 Fecha:</strong> ' + p.date + '<br><br>' + 
+        '<strong>📝 Descripción:</strong><br>' + p.description + '<br><br>' + 
+        '<strong>👤 Reportado por:</strong> ' + (p.reporter || t('Anónimo'));
+      
+      if (p.photo) {
+        modalImg.src = p.photo;
+        modalImg.style.display = 'block';
+        details += '<br><br><strong>📷 Foto:</strong><br><img src="' + p.photo + '" style="max-width: 100%; max-height: 300px; margin-top: 10px; border-radius: 8px;">';
+      } else {
+        modalImg.style.display = 'none';
+      }
+      
+      caption.innerHTML = details;
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+}
+
+function viewEntry(index) {
+  var entries = loadEntries();
+  var e = entries[index];
+  if (e) {
+    var modal = document.getElementById('photoModal');
+    var modalImg = document.getElementById('photoModalImg');
+    var caption = document.getElementById('photoModalCaption');
+    if (modal && modalImg && caption) {
+      var details = '<strong>👤 Nombre:</strong> ' + e.name + '<br>' + 
+        '<strong>🏷️ Tipo:</strong> ' + e.type + '<br>' + 
+        '<strong>🔄 Acción:</strong> ' + e.action + '<br>' + 
+        '<strong>🕐 Hora:</strong> ' + e.time;
+      
+      modalImg.style.display = 'none';
+      caption.innerHTML = details;
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+}
+
+function closePhotoModal(event) {
+  if (event && event.target !== event.currentTarget) return;
+  var modal = document.getElementById('photoModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+}
+
+function closePhotoModalBtn() {
+  var modal = document.getElementById('photoModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closePhotoModalBtn();
+  }
+});
+
+function showTab(tabName) {
+  ['register','problem','admin'].forEach(function(n){
+    var el = document.getElementById(n+'-tab');
+    if (el) el.classList.add('hidden');
+  });
+  var active = document.getElementById(tabName+'-tab');
+  if (active) active.classList.remove('hidden');
+  document.querySelectorAll('.security-tab').forEach(function(tab){
+    tab.classList.remove('active');
+    if (tab.getAttribute('data-tab') === tabName) tab.classList.add('active');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateStats();
+});
+  </script>
+  <script>
+    // Update date/time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit', 
+        minute: '2-digit'
+      };
+      // Use current language for date format
+      const lang = localStorage.getItem('language') || 'es';
+      const locale = lang === 'en' ? 'en-US' : 'es-ES';
+      const dateTimeStr = now.toLocaleDateString(locale, options);
+      const element = document.getElementById('currentDateTime');
+      if (element) {
+        element.textContent = dateTimeStr;
+      }
+    }
+    
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+
+    // Update stats
+    function updateStats() {
+      const entries = loadEntries();
+      const problems = loadProblems();
+      
+      document.getElementById('statTotalEntries').textContent = entries.length;
+      document.getElementById('statTotalProblems').textContent = problems.length;
+      
+      const solved = problems.filter(p => p.resolved).length;
+      document.getElementById('statSolvedProblems').textContent = solved;
+    }
+
+    // Initial stats update
+    document.addEventListener('DOMContentLoaded', function() {
+      updateStats();
+    });
+  </script>
+  <!-- Photo Modal -->
+  <div id="photoModal" class="photo-modal" onclick="closePhotoModal(event)">
+    <span class="photo-modal-close" onclick="closePhotoModalBtn()">&times;</span>
+    <img class="photo-modal-content" id="photoModalImg">
+    <div class="photo-modal-caption" id="photoModalCaption"></div>
+  </div>
+</body>
+</html>
